@@ -8,5 +8,8 @@ setup(
     license='MIT',
     author='Jonathan Hasenburg',
     author_email='',
-    description='An MQTT connected Tinkerforge Remote Switch for 433Mhz sockets.'
+    description='An MQTT connected Tinkerforge Remote Switch for 433Mhz sockets.',
+    install_requires=[
+        'tinkerforge'
+    ]
 )
