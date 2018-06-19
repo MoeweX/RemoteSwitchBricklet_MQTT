@@ -1,3 +1,4 @@
+# coding=utf-8
 import logging
 import time
 
@@ -22,13 +23,13 @@ class TinkerforgeSender(object):
         self.__ipcon.connect(HOST, PORT)  # Connect to brickd
 
         self.__operations = deque()
-        self.__operationsWorker = Thread(target=self.__workOperations)
-        self.__keepRunning = True
-        self.__operationsWorker.start()
+        self.__operations_worker = Thread(target=self.__work_operations)
+        self.__keep_worker_running = True
+        self.__operations_worker.start()
 
         self.__logger.info("TinkerforgeSender running")
 
-    def addSocketSwitchOperationToQueue(self, address, unit, state):
+    def add_socket_switch_operation_to_queue(self, address, unit, state):
         """
         Add a switch operation for the given socket to the TinkerforgeSender.
 
@@ -40,23 +41,23 @@ class TinkerforgeSender(object):
 
     def shutdown(self):
         self.__logger.info("TinkerforgeSender stopping")
-        self.__keepRunning = False
-        while self.__operationsWorker.isAlive():
+        self.__keep_worker_running = False
+        while self.__operations_worker.isAlive():
             self.__logger.debug("Waiting for operations worker to stop")
             time.sleep(1)
         self.__ipcon.disconnect()
         self.__logger.info("TinkerforgeSender shutdown")
 
-    def __workOperations(self):
+    def __work_operations(self):
         self.__logger.info("Operations worker running")
-        while self.__keepRunning:
-            if self.__operationOpen():
+        while self.__keep_worker_running:
+            if self.__operation_open():
                 operation = self.__dequeueOperation()
-                self.__switchSocketB(operation[0], operation[1], operation[2])
+                self.__switch_socket_B(operation[0], operation[1], operation[2])
 
             time.sleep(0.01)
 
-    def __operationOpen(self):
+    def __operation_open(self):
         if self.__operations:
             return True
         return False
@@ -64,7 +65,7 @@ class TinkerforgeSender(object):
     def __dequeueOperation(self):
         return self.__operations.popleft()
 
-    def __switchSocketB(self, address, unit, state):
+    def __switch_socket_B(self, address, unit, state):
         """
         Switch socket of type B
 
@@ -90,5 +91,3 @@ class TinkerforgeSender(object):
             return
 
         self.__rs.switch_socket_b(address, unit, state)
-
-
