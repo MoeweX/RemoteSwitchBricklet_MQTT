@@ -2,15 +2,13 @@
 import logging
 import time
 
+from tinkerforge_remote_switch import CONFIG
+
 from tinkerforge.ip_connection import IPConnection
 from tinkerforge.ip_connection import Error
 from tinkerforge.bricklet_remote_switch import BrickletRemoteSwitch
 from collections import deque
 from threading import Thread
-
-HOST = "localhost"
-PORT = 4223
-UID = "nXN"
 
 LOG = logging.getLogger(__name__)
 LOG.setLevel(logging.DEBUG)
@@ -20,15 +18,15 @@ class RSBController(object):
 
     def __init__(self):
         self.__ipcon = IPConnection()  # Create IP connection
-        self.__rs = BrickletRemoteSwitch(UID, self.__ipcon)  # Create device object
-        self.__ipcon.connect(HOST, PORT)  # Connect to brickd
+        self.__rs = BrickletRemoteSwitch(CONFIG.uid, self.__ipcon)  # Create device object
+        self.__ipcon.connect(CONFIG.host, CONFIG.port)  # Connect to brickd
 
         self.__operations = deque()
         self.__operations_worker = Thread(target=self.__work_operations)
         self.__keep_worker_running = True
         self.__operations_worker.start()
 
-        self._mqtt = None
+        self.__mqtt = None
 
         LOG.info("RSBController running")
 
@@ -106,6 +104,6 @@ class RSBController(object):
                 return
 
             self.__rs.switch_socket_b(address, unit, state)
-            # TODO publish switching with mqtt
+            self.__mqtt.publish(address, unit, state)
         except Error as err:
             LOG.error(err.description)

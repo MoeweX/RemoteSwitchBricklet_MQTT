@@ -1,17 +1,9 @@
-version = 1
+[tinkerforge]
+host = "homebridge.local"
+port = 4223
+uid = "nXN"
 
-[formatters]
-
-    [formatters.f]
-    format = "%(asctime)s %(name)-12s %(levelname)-8s %(message)s"
-
-[handlers]
-
-    [handlers.h]
-    class = "logging.StreamHandler" # console
-    formatter = "f"
-    level = 10 # logging.DEBUG
-
-[root]
-    handlers = "h"
-    level = 10 # standard, may be overwritten by definitions in handlers
+[mqtt]
+broker_address = "ubuntuMini.local"
+publish_prefix = "rsb/out"
+subscribe_prefix = "rsb/in"
