@@ -4,12 +4,6 @@ Tinkerforge Remote Switch Bricklet MQTT client for the control of 433Mhz outlets
 
 Open TODO:
 - Add transport level encryption and user authentication
-- Add general configuration file
-    - Publish and subscribe topics
-    - MQTT authentication data
-    - Mqtt client name and broker address
-    - RSBController data
-- Add logging configuration file
 
 ## General Idea
 
@@ -22,9 +16,26 @@ Open TODO:
 
 ## Installation/Setup
 
-TODO
+Install package:
+```
+git clone https://github.com/MoeweX/RemoteSwitchBricklet_MQTT.git
+cd RemoteSwitchBricklet_MQTT
+python setup.py install --user
+```
+
+Install Tinkerforge brickD. On Debian (also Ubuntu):
+```
+sudo apt-get -y install libusb-1.0-0 libudev1 pm-utils
+wget http://download.tinkerforge.com/tools/brickd/linux/brickd_linux_latest_amd64.deb
+sudo dpkg -i brickd_linux_latest_amd64.deb
+rm brickd_linux_latest_amd64.deb
+```
+
+Run with `python tinkerforge_remote_switch/main.py`
 
 ## MQTT
+
+The below described topics can be changed in the configuration file.
 
 ### MQTT Client Subscriptions
 
