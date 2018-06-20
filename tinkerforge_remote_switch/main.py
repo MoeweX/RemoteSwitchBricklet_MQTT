@@ -3,12 +3,8 @@ import time
 
 from tinkerforge_remote_switch.MQTTProcessor import MQTTProcessor
 from tinkerforge_remote_switch.RSBController import RSBController
-import logging
 
 if __name__ == '__main__':
-    # enable logging
-    logging.basicConfig()
-
     # create objects
     tinkerforge_sender = RSBController()
     mqtt_processor = MQTTProcessor(tinkerforge_sender)

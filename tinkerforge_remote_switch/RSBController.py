@@ -12,13 +12,13 @@ HOST = "localhost"
 PORT = 4223
 UID = "nXN"
 
+LOG = logging.getLogger(__name__)
+LOG.setLevel(logging.DEBUG)
+
 
 class RSBController(object):
 
     def __init__(self):
-        self.__logger = logging.getLogger("RSBController")
-        self.__logger.setLevel(logging.DEBUG)
-
         self.__ipcon = IPConnection()  # Create IP connection
         self.__rs = BrickletRemoteSwitch(UID, self.__ipcon)  # Create device object
         self.__ipcon.connect(HOST, PORT)  # Connect to brickd
@@ -30,7 +30,7 @@ class RSBController(object):
 
         self._mqtt = None
 
-        self.__logger.info("RSBController running")
+        LOG.info("RSBController running")
 
     # noinspection PyAttributeOutsideInit
     def inject_mqtt_processor(self, mqtt):
@@ -52,16 +52,16 @@ class RSBController(object):
         self.__operations.append([int(address), int(unit), int(state)])
 
     def shutdown(self):
-        self.__logger.info("RSBController stopping")
+        LOG.info("RSBController stopping")
         self.__keep_worker_running = False
         while self.__operations_worker.isAlive():
-            self.__logger.debug("Waiting for operations worker to stop")
+            LOG.debug("Waiting for operations worker to stop")
             time.sleep(1)
         self.__ipcon.disconnect()
-        self.__logger.info("RSBController shutdown")
+        LOG.info("RSBController shutdown")
 
     def __work_operations(self):
-        self.__logger.info("Operations worker running")
+        LOG.info("Operations worker running")
         while self.__keep_worker_running:
             if self.__operation_open():
                 operation = self.__dequeueOperation()
@@ -89,11 +89,11 @@ class RSBController(object):
 
         try:
             if state == 0:
-                self.__logger.debug("Switching {0}-{1} to off".format(address, unit))
+                LOG.debug("Switching {0}-{1} to off".format(address, unit))
             elif state == 1:
-                self.__logger.debug("Switching {0}-{1} to on".format(address, unit))
+                LOG.debug("Switching {0}-{1} to on".format(address, unit))
             else:
-                self.__logger.warning("State {0} is no valid switching value".format(state))
+                LOG.warning("State {0} is no valid switching value".format(state))
 
             tries = 0
             while self.__rs.get_switching_state() == 1 and tries < 100:
@@ -102,10 +102,10 @@ class RSBController(object):
                 tries += 1
 
             if tries == 100:
-                self.__logger.warning("Sender was not ready to switch again after 100 tries")
+                LOG.warning("Sender was not ready to switch again after 100 tries")
                 return
 
             self.__rs.switch_socket_b(address, unit, state)
             # TODO publish switching with mqtt
         except Error as err:
-            self.__logger.error(err.description)
+            LOG.error(err.description)

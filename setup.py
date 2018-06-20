@@ -12,6 +12,7 @@ setup(
     description="An MQTT connected Tinkerforge Remote Switch for 433Mhz sockets.",
     install_requires=[
         "tinkerforge",
-        "paho-mqtt"
+        "paho-mqtt",
+        "toml"
     ]
 )
