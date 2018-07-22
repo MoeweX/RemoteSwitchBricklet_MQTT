@@ -42,7 +42,7 @@ class MQTTProcessor(object):
         elif payload == "1":
             self.__rsb_controller.add_socket_switch_operation_to_queue(topic_array[2], topic_array[3], 1)
         else:
-            LOG.warning("Payload {0} for topic {0} is not valid".format(payload, topic))
+            LOG.warning("Payload {0} for topic {1} is not valid".format(payload, topic))
 
     def publish(self, address, unit, state):
         topic = CONFIG.publish_prefix + "/{0}/{1}".format(address, unit)
