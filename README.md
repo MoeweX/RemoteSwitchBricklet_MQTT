@@ -45,6 +45,6 @@ E.g., to switch the outlet with the address 10, unit 1 to on, a controlling clie
 
 ### MQTT Client Publications
 
-The client publishes to `rsb/out/#`. Every time the client receives anything on this topic, it publishes to the same topic the new state as a confirmation.
+The client publishes to `rsb/out/#`. Every time the client receives anything for one if its subscriptions, it publishes to the  topic with the same suffix the new state as a confirmation.
 
 E.g., after it switched the before specified socket to on, the client publishes `rsb/out/10/1` with the payload `1`.
