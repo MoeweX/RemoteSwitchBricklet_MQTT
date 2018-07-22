@@ -7,6 +7,7 @@ from tinkerforge_remote_switch.RSBController import RSBController
 
 LOG = logging.getLogger(__name__)
 
+
 class MQTTProcessor(object):
 
     def __init__(self, rsb_controller):

@@ -1,5 +1,5 @@
 [tinkerforge]
-host = "homebridge.local"
+host = "ubuntuMini.local"
 port = 4223
 uid = "nXN"
 
