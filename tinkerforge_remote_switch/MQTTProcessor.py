@@ -5,11 +5,7 @@ import paho.mqtt.client as mqtt
 from tinkerforge_remote_switch import CONFIG
 from tinkerforge_remote_switch.RSBController import RSBController
 
-MQTT_BROKER_ADDRESS = "ubuntuMini.local"
-
 LOG = logging.getLogger(__name__)
-LOG.setLevel(logging.DEBUG)
-
 
 class MQTTProcessor(object):
 

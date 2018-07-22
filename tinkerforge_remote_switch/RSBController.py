@@ -11,7 +11,6 @@ from collections import deque
 from threading import Thread
 
 LOG = logging.getLogger(__name__)
-LOG.setLevel(logging.DEBUG)
 
 
 class RSBController(object):
