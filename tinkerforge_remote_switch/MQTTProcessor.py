@@ -21,7 +21,9 @@ class MQTTProcessor(object):
         self.__client.connect(CONFIG.broker_address)
 
         self.__client.on_message = self.__on_message
-        self.__client.subscribe(CONFIG.subscribe_prefix + "/#")
+        topic = CONFIG.subscribe_prefix + "/#"
+        LOG.info("Subscribing to topic {0}".format(topic))
+        self.__client.subscribe(topic)
         self.__client.loop_start()
 
         LOG.info("MQTTProcessor running")
@@ -29,6 +31,11 @@ class MQTTProcessor(object):
     # noinspection PyUnusedLocal
     def __on_message(self, client, userdata, message):
         topic = message.topic
+
+        # No idea why I need this, seems like it subscribed to all which is really bad
+        if not str(topic).startswith(CONFIG.subscribe_prefix):
+            return
+
         payload = str(message.payload.decode("utf-8"))
         LOG.debug("Message topic: {0}".format(topic))
         LOG.debug("Message payload: {0}".format(payload))
@@ -36,6 +43,7 @@ class MQTTProcessor(object):
         topic_array = topic.split("/")
         if len(topic_array) != 4:
             LOG.warning("Topic {0} has more than four parts".format(topic))
+            return
 
         if payload == "0":
             self.__rsb_controller.add_socket_switch_operation_to_queue(topic_array[2], topic_array[3], 0)
